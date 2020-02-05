@@ -18,7 +18,7 @@ public class NetworkManager {
     private var session: URLSession
     private var jsonDecoder = JSONDecoder()
     
-    init(session: URLSession) {
+    public init(session: URLSession = .shared) {
         self.session = session
     }
     
