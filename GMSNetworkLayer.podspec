@@ -13,4 +13,8 @@ Pod::Spec.new do |spec|
   spec.source       = { :git => "https://github.com/GabrielSilveiraa/GMSNetworkLayer.git", :tag => "#{spec.version}" }
 
   spec.source_files  = "NetworkLayer/*.swift"
+
+  spec.ios.deployment_target = "13.3"
+  spec.swift_version = "5"
+
 end
