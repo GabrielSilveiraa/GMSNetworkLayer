@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
 
   spec.name         = "GMSNetworkLayer"
-  spec.version      = "1.1.1"
+  spec.version      = "1.1.2"
   spec.summary      = "Stylish HTTP Networking in Swift."
 
   spec.homepage     = "https://github.com/GabrielSilveiraa/GMSNetworkLayer"
@@ -14,7 +14,7 @@ Pod::Spec.new do |spec|
 
   spec.source_files  = "NetworkLayer/*.swift"
 
-  spec.ios.deployment_target = "13.3"
+  spec.ios.deployment_target = "12.2"
   spec.swift_version = "5"
 
 end
