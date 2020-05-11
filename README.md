@@ -94,7 +94,7 @@ extension BooksListService: BooksListServiceProtocol {
 }
 ```
 
-The Result Object has to agree with Decodable protocol as the example above:
+The Result Object has to agree with Decodable protocol as the example below:
 
 ```
 struct BookVolumes: Decodable {
