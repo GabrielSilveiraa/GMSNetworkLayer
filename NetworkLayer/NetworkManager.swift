@@ -16,10 +16,15 @@ public protocol NetworkManagerProtocol: AnyObject {
 
 public class NetworkManager {
     private var session: URLSession
-    private var jsonDecoder = JSONDecoder()
+    private var jsonDecoder: JSONDecoder
+    private var loggingEnabled: Bool
     
-    public init(session: URLSession = .shared) {
+    public init(session: URLSession = .shared,
+                customDecoder: JSONDecoder = JSONDecoder(),
+                loggingEnabled: Bool = false) {
         self.session = session
+        self.jsonDecoder = customDecoder
+        self.loggingEnabled = loggingEnabled
     }
     
     private func buildRequest(from route: EndPointType) throws -> URLRequest {
@@ -43,6 +48,12 @@ public class NetworkManager {
         default: return .failure(NetworkError.failed)
         }
     }
+    
+    private func handleLogging(error: Error) {
+        if loggingEnabled {
+            print(error)
+        }
+    }
 }
 
 extension NetworkManager: NetworkManagerProtocol {
@@ -52,7 +63,9 @@ extension NetworkManager: NetworkManagerProtocol {
             let request = try self.buildRequest(from: route)
             task = session.dataTask(with: request) { data, response, error in
                 if error != nil {
-                    completion(.failure(NetworkError.noConnection))
+                    let error = NetworkError.noConnection
+                    self.handleLogging(error: error)
+                    completion(.failure(error))
                     return
                 }
                 
@@ -64,23 +77,27 @@ extension NetworkManager: NetworkManagerProtocol {
                 switch result {
                 case .success:
                     guard let responseData = data else {
-                        completion(.failure(NetworkError.noData))
+                        let error = NetworkError.noData
+                        self.handleLogging(error: error)
+                        completion(.failure(error))
                         return
                     }
                     do {
                         let jsonResponse = try self.jsonDecoder.decode(T.self, from: responseData)
                         completion(.success(jsonResponse))
                     } catch {
-                        print(error)
+                        self.handleLogging(error: error)
                         completion(.failure(NetworkError.unableToDecode))
                     }
                     
                 case .failure(let error):
+                    self.handleLogging(error: error)
                     completion(.failure(error))
                 }
             }
             
         } catch {
+            self.handleLogging(error: error)
             completion(.failure(error))
         }
         task?.resume()
