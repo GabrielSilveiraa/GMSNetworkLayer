@@ -1,5 +1,5 @@
 # GMSNetworkLayer
-Stylish HTTP Networking in Swift.
+A Stylish HTTP Networking in Swift.
 
 [![Build Status](https://travis-ci.com/GabrielSilveiraa/GMSNetworkLayer.svg?branch=master)](https://travis-ci.com/GabrielSilveiraa/GMSNetworkLayer) [![codecov](https://codecov.io/gh/GabrielSilveiraa/GMSNetworkLayer/branch/master/graph/badge.svg)](https://codecov.io/gh/GabrielSilveiraa/GMSNetworkLayer)
 
