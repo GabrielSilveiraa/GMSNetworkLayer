@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import NetworkLayer
+@testable import GMSNewtorkLayer
 
 class NetworkManagerTests: XCTestCase {
     func testServiceStatus401Response() {
