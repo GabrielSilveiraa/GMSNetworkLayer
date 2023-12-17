@@ -12,6 +12,7 @@ public typealias NetworkCompletion<T> = (_ response: Result<T, Error>) -> Void
 
 public protocol NetworkManagerProtocol: AnyObject {
     func request<T: Decodable>(_ route: EndPointType, completion: @escaping NetworkCompletion<T>)
+    func request<T: Decodable>(_ route: EndPointType) async throws -> Result<T, Error>
 }
 
 public class NetworkManager {
@@ -32,7 +33,8 @@ public class NetworkManager {
                                  cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
                                  timeoutInterval: 10.0)
         request.httpMethod = route.httpMethod.rawValue
-        
+        request.allHTTPHeaderFields = route.headers
+
         if let encoding = route.encoding {
             try encoding.encode(urlRequest: &request, parameters: route.parameters)
         }
@@ -101,5 +103,29 @@ extension NetworkManager: NetworkManagerProtocol {
             completion(.failure(error))
         }
         task?.resume()
+    }
+
+    public func request<T: Decodable>(_ route: EndPointType) async throws -> Result<T, Error> {
+        let request = try self.buildRequest(from: route)
+        let (data, response) = try await session.data(for: request)
+        guard let response = response as? HTTPURLResponse else {
+            return .failure(NetworkError.noResponse)
+        }
+
+        let result = self.handleNetworkResponse(response)
+        switch result {
+        case .success:
+            do {
+                let jsonResponse = try self.jsonDecoder.decode(T.self, from: data)
+                return .success(jsonResponse)
+            } catch {
+                self.handleLogging(error: error)
+                return .failure(NetworkError.unableToDecode)
+            }
+
+        case .failure(let error):
+            self.handleLogging(error: error)
+            return .failure(error)
+        }
     }
 }
