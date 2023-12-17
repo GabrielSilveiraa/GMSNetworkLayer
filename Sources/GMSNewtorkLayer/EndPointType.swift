@@ -13,5 +13,6 @@ public protocol EndPointType {
     var path: String { get }
     var httpMethod: HTTPMethod { get }
     var encoding: ParameterEncoding? { get }
-    var parameters: [String: Any] { get }
+    var parameters: [String: AnyObject]? { get }
+    var headers: [String: String]? { get }
 }

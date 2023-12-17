@@ -33,7 +33,8 @@ public class NetworkManager {
                                  cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
                                  timeoutInterval: 10.0)
         request.httpMethod = route.httpMethod.rawValue
-        
+        request.allHTTPHeaderFields = route.headers
+
         if let encoding = route.encoding {
             try encoding.encode(urlRequest: &request, parameters: route.parameters)
         }
