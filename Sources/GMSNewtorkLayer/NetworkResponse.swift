@@ -62,4 +62,4 @@ extension NetworkError: LocalizedError {
     }
 }
 
-public struct Response204: Decodable {}
+public struct EmptyResponse: Decodable {}
