@@ -84,6 +84,13 @@ extension NetworkManager: NetworkManagerProtocol {
                         completion(.failure(error))
                         return
                     }
+                    
+                    if responseData.isEmpty, 
+                        let emptyResponse = EmptyResponse() as? T {
+                        completion(.success(emptyResponse))
+                        return
+                    }
+                    
                     do {
                         let jsonResponse = try self.jsonDecoder.decode(T.self, from: responseData)
                         completion(.success(jsonResponse))
